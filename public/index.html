@@ -6,251 +6,472 @@
     <title>ADHD Task Helper</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
         :root {
-            --primary-color: #0071e3;
-            --secondary-color: #86b9ff;
-            --text-dark: #1d1d1f;
-            --text-light: #f5f5f7;
+            --primary-color: #7c3aed;
+            --primary-hover: #6d28d9;
+            --secondary-color: #ddd6fe;
+            --text-dark: #1f2937;
+            --text-light: #f9fafb;
             --background-light: #ffffff;
-            --background-dark: #f5f5f7;
-            --success-color: #5cb85c;
+            --background-dark: #f3f4f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
             --border-radius: 12px;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--background-light);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7ff 0%, #e0f2fe 100%);
             color: var(--text-dark);
-            line-height: 1.5;
-            padding: 20px 0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
         }
         
-        .container {
-            max-width: 800px;
+        .app-container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: var(--background-light);
+            padding: 0;
+            width: 95%;
+            overflow: hidden;
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-lg);
+            background-color: var(--background-light);
         }
-        
-        h1 {
-            font-size: 2.5rem;
+
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            padding: 1.5rem 2rem;
+            color: var(--text-light);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .app-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .app-title i {
+            font-size: 1.75rem;
+        }
+
+        .app-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 0;
+        }
+
+        .chat-section {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            border-right: 1px solid var(--background-dark);
+            height: calc(100vh - 180px);
+            max-height: 700px;
+        }
+
+        .task-section {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            background-color: var(--background-dark);
+            height: calc(100vh - 180px);
+            max-height: 700px;
+        }
+
+        .indicators-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
             font-weight: 600;
-            text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 1rem;
             color: var(--text-dark);
-        }
-        
-        h3 {
-            font-size: 1.5rem;
-            font-weight: 500;
-            margin-bottom: 15px;
-            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .chat-container {
-            background-color: var(--background-dark);
+            background-color: var(--background-light);
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            max-height: 300px;
+            padding: 1.5rem;
+            flex-grow: 1;
             overflow-y: auto;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--background-dark);
+            margin-bottom: 1rem;
         }
         
         .ai-message, .user-message {
-            padding: 12px 16px;
-            margin-bottom: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
             border-radius: var(--border-radius);
-            animation: fadeIn 0.5s;
+            animation: fadeInUp 0.3s ease;
+            line-height: 1.5;
+            font-size: 1rem;
+            position: relative;
+            max-width: 85%;
         }
         
         .ai-message {
-            background-color: var(--background-light);
-            border-left: 4px solid var(--primary-color);
+            background-color: var(--secondary-color);
+            color: var(--text-dark);
+            margin-right: auto;
+            border-bottom-left-radius: 0;
+        }
+
+        .ai-message::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--secondary-color);
+            clip-path: polygon(100% 0, 0 100%, 100% 100%);
         }
         
         .user-message {
             background-color: var(--primary-color);
             color: var(--text-light);
-            margin-left: 20px;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
         }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-control {
-            border-radius: var(--border-radius) 0 0 var(--border-radius);
-            border: 1px solid #ced4da;
-            padding: 12px 16px;
-            font-size: 1rem;
-        }
-        
-        .btn-primary {
+
+        .user-message::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: -10px;
+            width: 20px;
+            height: 20px;
             background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
-            padding: 12px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            clip-path: polygon(0 0, 0 100%, 100% 100%);
         }
         
-        .btn-primary:hover {
-            background-color: #005bbd;
-            border-color: #005bbd;
+        .input-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
         }
         
-        .points-container {
-            background-color: var(--background-dark);
+        .input-field {
+            flex-grow: 1;
+            border: 1px solid var(--background-dark);
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            background-color: var(--background-light);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+        
+        .send-button {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .send-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .send-button:active {
+            transform: translateY(0);
+        }
+        
+        .card {
+            background-color: var(--background-light);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            border: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .points-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0.5rem 0;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .points-label {
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            opacity: 0.7;
             text-align: center;
         }
         
-        #points {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-        
         .todo-container {
-            background-color: var(--background-dark);
+            background-color: var(--background-light);
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            flex-grow: 1;
+            overflow-y: auto;
         }
         
         .task-item {
             display: flex;
             align-items: center;
             background-color: var(--background-light);
-            padding: 12px 16px;
-            margin-bottom: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
             border-radius: var(--border-radius);
-            animation: fadeIn 0.5s;
+            animation: fadeIn 0.3s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            min-height: 3rem;
         }
-        
+
+        .task-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
         .task-checkbox {
-            margin-right: 15px;
-            width: 20px;
-            height: 20px;
+            appearance: none;
+            -webkit-appearance: none;
+            flex: 0 0 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            margin-right: 1rem;
             cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .task-checkbox:checked {
+            background-color: var(--primary-color);
+        }
+
+        .task-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 0.875rem;
         }
         
         .task-text {
             flex-grow: 1;
+            font-size: 1rem;
+            transition: all 0.2s ease;
         }
         
         .task-complete {
             text-decoration: line-through;
-            color: #6c757d;
+            color: #9ca3af;
         }
-        
+
+        .mood-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .mood-meter {
+            width: 100%;
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mood-level {
+            height: 100%;
+            width: 50%;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            background: linear-gradient(to right, var(--danger-color), var(--warning-color), var(--success-color));
+        }
+
+        .mood-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mood-emoji {
+            font-size: 1.5rem;
+        }
+
         .onboarding-overlay {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .onboarding-overlay.active {
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
             display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
         }
-        
+
         .onboarding-modal {
             background-color: var(--background-light);
+            padding: 2rem;
             border-radius: var(--border-radius);
-            padding: 40px;
-            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            max-width: 450px;
             width: 90%;
-            box-shadow: var(--shadow);
             text-align: center;
-            animation: fadeInUp 0.5s;
+            animation: fadeInUp 0.4s ease;
         }
-        
-        .onboarding-modal h2 {
-            color: var(--text-dark);
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
+
+        .onboarding-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
         }
-        
-        .onboarding-modal p {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-dark);
-        }
-        
-        .onboarding-modal .btn-primary {
+
+        .onboarding-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--background-dark);
             border-radius: var(--border-radius);
-            padding: 12px 30px;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .onboarding-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        .start-button {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
             width: 100%;
         }
-        
-        .onboarding-modal .btn-primary:disabled {
-            background-color: #6c757d;
-            border-color: #6c757d;
+
+        .start-button:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        .start-button:disabled {
+            background-color: #d1d5db;
+            cursor: not-allowed;
         }
-        
-        @keyframes fadeInUp {
-            from { 
-                opacity: 0;
-                transform: translateY(20px);
+
+        @media (max-width: 768px) {
+            .app-content {
+                grid-template-columns: 1fr;
             }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
+
+            .chat-section {
+                border-right: none;
+                border-bottom: 1px solid var(--background-dark);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>ADHD Task Helper</h1>
-        
-        <div class="chat-container" id="chatContainer">
-            <div class="ai-message">Hello! I'm here to help you break down tasks. What would you like help with today?</div>
-        </div>
-        
-        <div class="input-group">
-            <input type="text" id="userInput" placeholder="Describe your task..." class="form-control">
-            <button id="sendButton" class="btn btn-primary">Send</button>
-        </div>
-        
-        <div class="points-container">
-            <h3>Your Progress</h3>
-            <div id="points">0</div>
-        </div>
-        
-        <div class="todo-container">
-            <h3>Your Tasks</h3>
-            <div id="todoList"></div>
-        </div>
+    <div class="app-container">
+        <header class="app-header">
+            <h1 class="app-title"><i class="bi bi-check2-circle"></i>ADHD Task Helper</h1>
+        </header>
+        <main class="app-content">
+            <section class="chat-section">
+                <div class="chat-container" id="chatContainer">
+                    <div class="ai-message">Hello! I'm here to help you break down tasks. What would you like help with today?</div>
+                </div>
+                <div class="input-container">
+                    <input type="text" class="input-field" id="userInput" placeholder="Describe your task...">
+                    <button class="send-button" id="sendButton">
+                        <i class="bi bi-send"></i>Send
+                    </button>
+                </div>
+            </section>
+            <section class="task-section">
+                <div class="indicators-row">
+                    <div class="card">
+                        <div class="points-value" id="points">0</div>
+                        <div class="points-label">Points Earned</div>
+                    </div>
+                    <div class="card">
+                        <div class="mood-display">
+                            <div class="mood-meter">
+                                <div class="mood-level" id="batteryLevel"></div>
+                            </div>
+                            <div class="mood-text" id="sentimentText">Feeling Okay</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="todo-container" id="todoList"></div>
+            </section>
+        </main>
     </div>
 
     <div class="onboarding-overlay" id="onboardingOverlay">
         <div class="onboarding-modal">
-            <h2>Welcome to ADHD Task Helper!</h2>
-            <p class="mb-4">Let's start by getting to know you. What's your name?</p>
-            <div class="input-group mb-3">
-                <input type="text" id="nameInput" class="form-control" placeholder="Enter your name">
-            </div>
-            <button id="startButton" class="btn btn-primary" disabled>Let's Begin!</button>
+            <h2 class="onboarding-title">Welcome!</h2>
+            <p>Let's start by getting to know you. What's your name?</p>
+            <input type="text" class="onboarding-input" id="nameInput" placeholder="Enter your name">
+            <button class="start-button" id="startButton" disabled>Let's Begin</button>
         </div>
     </div>
 

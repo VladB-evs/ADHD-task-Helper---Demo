@@ -44,10 +44,15 @@ app.post('/api/generate-tasks', async (req, res) => {
         // Very basic JSON extraction - in production you'd want more robust parsing
         let tasks = [];
         try {
-            // Try to find a JSON array in the response
-            const jsonMatch = cohereText.match(/\[.*\]/s);
-            if (jsonMatch) {
-                tasks = JSON.parse(jsonMatch[0]);
+            // Try to find a JSON array in the response - using non-greedy match to avoid capturing too much
+            const jsonMatch = cohereText.match(/\[.*?\]/s);
+            if (jsonMatch && jsonMatch[0]) {
+                try {
+                    tasks = JSON.parse(jsonMatch[0]);
+                } catch (jsonError) {
+                    console.log('JSON parsing failed, falling back to text processing');
+                    throw jsonError; // Trigger the fallback
+                }
             } else {
                 // Fallback: split by newlines and clean up
                 tasks = cohereText
