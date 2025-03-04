@@ -13,7 +13,7 @@ let nameInput;
 let startButton;
 
 // API endpoint for task generation
-const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api/generate-tasks' : 'https://adhd-task-helper-demo.vercel.app/api/generate-tasks';
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api/generate-tasks' : '/api/generate-tasks';
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
