@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 const corsOptions = {
-    origin: 'adhd-task-helper-demo.vercel.app', 
+    origin: ['https://adhd-task-helper-demo.vercel.app', 'http://adhd-task-helper-demo.vercel.app', 'http://localhost:3000'],
     optionsSuccessStatus: 200
 };
 
